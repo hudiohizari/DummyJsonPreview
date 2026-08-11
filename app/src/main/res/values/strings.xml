@@ -10,7 +10,7 @@
     <string name="title_login">Sign in</string>
     <string name="title_products">Products</string>
     <string name="title_product_detail">Product %1$d</string>
-    <string name="title_product_edit">Edit product %1$d</string>
+    <string name="title_edit_product">Edit product</string>
     <string name="title_add_product">Add product</string>
 
     <string name="label_username">Username</string>
@@ -63,8 +63,23 @@
     <string name="format_dimensions">%1$s x %2$s x %3$s cm</string>
     <string name="format_minimum_order">%1$d pcs</string>
 
+    <string name="label_title">Title</string>
+    <string name="label_description">Description</string>
+    <string name="label_category">Category</string>
+    <string name="label_price">Price</string>
+    <string name="label_discount">Discount percentage</string>
+    <string name="label_stock">Stock</string>
+
+    <string name="action_save">Save</string>
+    <string name="hint_optional">Optional</string>
+
+    <string name="error_field_required">This field is required</string>
+    <string name="error_field_number">Enter a valid number</string>
+    <string name="error_field_percent">Enter a percentage between 0 and 100</string>
+
+    <string name="save_success_title">Product saved</string>
+    <string name="save_success_message">%1$s was saved.</string>
+
     <string name="coming_soon_message">This section is not available yet.</string>
     <string name="placeholder_login">Sign in with your DummyJSON account.</string>
-    <string name="placeholder_edit">Editing arrives with the product form.</string>
-    <string name="placeholder_add_product">Create a product from this tab.</string>
 </resources>

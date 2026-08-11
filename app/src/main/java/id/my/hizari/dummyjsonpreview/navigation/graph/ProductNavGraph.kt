@@ -59,10 +59,10 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             arguments = listOf(
                 navArgument(name = NavigationArgs.PRODUCT_ID, builder = { type = NavType.IntType })
             )
-        ) { backStackEntry ->
+        ) {
             ProductEditScreen(
                 modifier = Modifier.fillMaxSize(),
-                productId = backStackEntry.arguments?.getInt(NavigationArgs.PRODUCT_ID) ?: 0
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

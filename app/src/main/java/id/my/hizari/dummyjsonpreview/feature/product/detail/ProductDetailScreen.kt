@@ -52,6 +52,7 @@ import id.my.hizari.dummyjsonpreview.R
 import id.my.hizari.dummyjsonpreview.domain.product.model.Dimensions
 import id.my.hizari.dummyjsonpreview.domain.product.model.Product
 import id.my.hizari.dummyjsonpreview.domain.product.model.ProductReview
+import id.my.hizari.dummyjsonpreview.ui.components.MessageDialog
 import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 import id.my.hizari.dummyjsonpreview.util.toDecimalLabel
@@ -184,7 +185,11 @@ fun ProductDetailContent(
 
     // The product no longer exists, so acknowledging the result leaves the screen.
     if (state.deletedTitle != null) {
-        DeleteSuccessDialog(deletedTitle = state.deletedTitle, onDismiss = onNavigateBack)
+        MessageDialog(
+            title = stringResource(id = R.string.delete_success_title),
+            message = stringResource(id = R.string.delete_success_message, state.deletedTitle),
+            onDismiss = onNavigateBack
+        )
     }
 }
 
@@ -502,24 +507,6 @@ private fun DeleteConfirmDialog(
                 onClick = onDismiss,
                 enabled = !isDeleting,
                 content = { Text(text = stringResource(id = R.string.action_cancel)) }
-            )
-        }
-    )
-}
-
-@Composable
-private fun DeleteSuccessDialog(
-    deletedTitle: String,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(id = R.string.delete_success_title)) },
-        text = { Text(text = stringResource(id = R.string.delete_success_message, deletedTitle)) },
-        confirmButton = {
-            TextButton(
-                onClick = onDismiss,
-                content = { Text(text = stringResource(id = R.string.action_ok)) }
             )
         }
     )

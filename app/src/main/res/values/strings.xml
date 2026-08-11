@@ -77,6 +77,12 @@
     <string name="error_field_number">Enter a valid number</string>
     <string name="error_field_percent">Enter a percentage between 0 and 100</string>
 
+    <string name="title_profile">Profile</string>
+    <string name="label_email">Email</string>
+    <string name="label_gender">Gender</string>
+    <string name="logout_confirm_title">Log out?</string>
+    <string name="logout_confirm_message">You will need to sign in again to continue.</string>
+
     <string name="save_success_title">Product saved</string>
     <string name="save_success_message">%1$s was saved.</string>
 

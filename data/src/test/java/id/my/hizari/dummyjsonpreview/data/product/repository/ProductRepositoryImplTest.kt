@@ -43,7 +43,7 @@ class ProductRepositoryImplTest {
 
     @Test
     fun `it maps a product page and forwards the paging window`() = runTest(testBody = {
-        coEvery(stubBlock = { api.getProducts(any(), any()) }) returns listResponse()
+        coEvery(stubBlock = { api.getProducts(limit = any(), skip = any()) }) returns listResponse()
 
         val page = repository.getProducts(limit = 20, skip = 40)
 
@@ -55,7 +55,7 @@ class ProductRepositoryImplTest {
 
     @Test
     fun `it forwards a search query with its paging window`() = runTest(testBody = {
-        coEvery(stubBlock = { api.searchProducts(any(), any(), any()) }) returns listResponse()
+        coEvery(stubBlock = { api.searchProducts(query = any(), limit = any(), skip = any()) }) returns listResponse()
 
         repository.searchProducts(query = "phone", limit = 20, skip = 20)
 
@@ -115,7 +115,7 @@ class ProductRepositoryImplTest {
 
     @Test
     fun `being offline surfaces as a network failure`() = runTest(testBody = {
-        coEvery(stubBlock = { api.getProducts(any(), any()) }) throws UnknownHostException()
+        coEvery(stubBlock = { api.getProducts(limit = any(), skip = any()) }) throws UnknownHostException()
 
         assertThrows(AppException.Network::class.java) {
             kotlinx.coroutines.runBlocking(block = { repository.getProducts(limit = 20, skip = 0) })
@@ -124,7 +124,7 @@ class ProductRepositoryImplTest {
 
     @Test
     fun `a slow server surfaces as a timeout`() = runTest(testBody = {
-        coEvery(stubBlock = { api.getProducts(any(), any()) }) throws SocketTimeoutException()
+        coEvery(stubBlock = { api.getProducts(limit = any(), skip = any()) }) throws SocketTimeoutException()
 
         assertThrows(AppException.Timeout::class.java) {
             kotlinx.coroutines.runBlocking(block = { repository.getProducts(limit = 20, skip = 0) })
@@ -133,7 +133,7 @@ class ProductRepositoryImplTest {
 
     @Test
     fun `a missing product surfaces as a http failure carrying the server message`() = runTest(testBody = {
-        coEvery(stubBlock = { api.getProduct(any()) }) throws HttpException(
+        coEvery(stubBlock = { api.getProduct(id = any()) }) throws HttpException(
             Response.error<Any>(
                 404,
                 """{"message":"Product with id '99999' not found"}"""

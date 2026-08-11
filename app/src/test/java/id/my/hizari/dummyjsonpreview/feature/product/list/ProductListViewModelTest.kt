@@ -44,7 +44,7 @@ class ProductListViewModelTest {
     @Test
     fun `it loads the first page as soon as it is created`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
 
         val viewModel = viewModel()
         advanceUntilIdle()
@@ -58,7 +58,7 @@ class ProductListViewModelTest {
     @Test
     fun `the greeting comes from the signed in user`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
 
         val viewModel = viewModel()
         advanceUntilIdle()
@@ -70,7 +70,7 @@ class ProductListViewModelTest {
     @Test
     fun `typing is debounced into a single search`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -79,7 +79,7 @@ class ProductListViewModelTest {
         viewModel.onQueryChange(query = "pho")
         viewModel.onQueryChange(query = "phone")
         advanceTimeBy(delayTimeMillis = DEBOUNCE_MILLIS - 100)
-        coVerify(exactly = 0, verifyBlock = { getProducts(query = "phone", any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { getProducts(query = "phone", limit = any(), skip = any()) })
 
         advanceUntilIdle()
 
@@ -93,7 +93,7 @@ class ProductListViewModelTest {
     @Test
     fun `clearing the query reloads the catalogue without waiting`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
         viewModel.onQueryChange(query = "phone")
@@ -110,8 +110,8 @@ class ProductListViewModelTest {
     @Test
     fun `the next page is appended and skip follows the loaded count`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 0) }) returns page(count = 20, skip = 0)
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 20) }) returns page(count = 20, skip = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 0) }) returns page(count = 20, skip = 0)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 20) }) returns page(count = 20, skip = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -125,7 +125,7 @@ class ProductListViewModelTest {
     @Test
     fun `it stops paging once the last page has arrived`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 5, total = 5)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 5, total = 5)
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -133,15 +133,15 @@ class ProductListViewModelTest {
         advanceUntilIdle()
 
         assertFalse(viewModel.state.value.hasMore)
-        coVerify(exactly = 1, verifyBlock = { getProducts(any(), any(), any()) })
+        coVerify(exactly = 1, verifyBlock = { getProducts(query = any(), limit = any(), skip = any()) })
     })
 
     /** A failed page must not wipe what the user is already looking at. */
     @Test
     fun `a pagination failure keeps the products already loaded`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 0) }) returns page(count = 20, skip = 0)
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 20) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 0) }) returns page(count = 20, skip = 0)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 20) }) throws AppException.Network(
             cause = UnknownHostException()
         )
         val viewModel = viewModel()
@@ -159,8 +159,8 @@ class ProductListViewModelTest {
     @Test
     fun `a failed page can be retried and appends on success`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 0) }) returns page(count = 20, skip = 0)
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 20) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 0) }) returns page(count = 20, skip = 0)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 20) }) throws AppException.Network(
             cause = UnknownHostException()
         )
         val viewModel = viewModel()
@@ -169,7 +169,7 @@ class ProductListViewModelTest {
         advanceUntilIdle()
         assertEquals("Network unavailable", viewModel.state.value.paginationErrorMessage)
 
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 20) }) returns page(count = 20, skip = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 20) }) returns page(count = 20, skip = 20)
         viewModel.onLoadNextPage()
         advanceUntilIdle()
 
@@ -181,8 +181,8 @@ class ProductListViewModelTest {
     @Test
     fun `a pagination failure does not raise a screen level error`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 0) }) returns page(count = 20, skip = 0)
-        coEvery(stubBlock = { getProducts(any(), any(), skip = 20) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 0) }) returns page(count = 20, skip = 0)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = 20) }) throws AppException.Network(
             cause = UnknownHostException()
         )
         val viewModel = viewModel()
@@ -200,7 +200,7 @@ class ProductListViewModelTest {
     @Test
     fun `refresh keeps the visible products while it reloads`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -214,11 +214,11 @@ class ProductListViewModelTest {
     @Test
     fun `refresh replaces the list and clears the refreshing flag`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 5, total = 5)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 5, total = 5)
         viewModel.onRefresh()
         advanceUntilIdle()
 
@@ -230,11 +230,11 @@ class ProductListViewModelTest {
     @Test
     fun `a failed refresh keeps the products and reports the error`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) throws AppException.Network(
             cause = UnknownHostException()
         )
         viewModel.onRefresh()
@@ -250,7 +250,7 @@ class ProductListViewModelTest {
     @Test
     fun `a first page failure with no data does take over the screen`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) throws AppException.Network(
             cause = UnknownHostException()
         )
 
@@ -263,7 +263,7 @@ class ProductListViewModelTest {
     @Test
     fun `refresh is ignored while one is already running`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -272,13 +272,13 @@ class ProductListViewModelTest {
         advanceUntilIdle()
 
         // one initial load plus a single refresh
-        coVerify(exactly = 2, verifyBlock = { getProducts(any(), any(), skip = 0) })
+        coVerify(exactly = 2, verifyBlock = { getProducts(query = any(), limit = any(), skip = 0) })
     })
 
     @Test
     fun `a first page failure surfaces as a screen level error`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) throws AppException.Network(
             cause = UnknownHostException()
         )
 
@@ -293,13 +293,13 @@ class ProductListViewModelTest {
     @Test
     fun `retry reloads the first page`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) throws AppException.Network(
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) throws AppException.Network(
             cause = UnknownHostException()
         )
         val viewModel = viewModel()
         advanceUntilIdle()
 
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         viewModel.onRetry()
         advanceUntilIdle()
 
@@ -310,12 +310,12 @@ class ProductListViewModelTest {
     @Test
     fun `an empty search reports empty rather than an error`() = runTest(testBody = {
         stubUser()
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 20)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 20)
         val viewModel = viewModel()
         advanceUntilIdle()
         assertFalse(viewModel.state.value.isEmpty)
 
-        coEvery(stubBlock = { getProducts(any(), any(), any()) }) returns page(count = 0, total = 0)
+        coEvery(stubBlock = { getProducts(query = any(), limit = any(), skip = any()) }) returns page(count = 0, total = 0)
         viewModel.onQueryChange(query = "zzzzqqq")
         advanceUntilIdle()
 
@@ -323,7 +323,7 @@ class ProductListViewModelTest {
         assertTrue(viewModel.state.value.products.isEmpty())
         assertFalse(viewModel.state.value.hasMore)
         assertNull(viewModel.state.value.errorMessage)
-        coVerify(exactly = 1, verifyBlock = { getProducts(query = "zzzzqqq", any(), any()) })
+        coVerify(exactly = 1, verifyBlock = { getProducts(query = "zzzzqqq", limit = any(), skip = any()) })
     })
 
     private fun viewModel() = ProductListViewModel(

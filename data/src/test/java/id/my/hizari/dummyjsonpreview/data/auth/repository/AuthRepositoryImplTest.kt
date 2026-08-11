@@ -55,7 +55,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `a successful login persists the session and returns the user`() = runTest(testBody = {
-        coEvery(stubBlock = { authApi.login(any()) }) returns loginResponse()
+        coEvery(stubBlock = { authApi.login(request = any()) }) returns loginResponse()
         val saved = slot<AuthSession>()
 
         val user = repository.login(username = "emilys", password = "emilyspass")
@@ -68,7 +68,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `login asks for a long lived token so the session survives a restart`() = runTest(testBody = {
-        coEvery(stubBlock = { authApi.login(any()) }) returns loginResponse()
+        coEvery(stubBlock = { authApi.login(request = any()) }) returns loginResponse()
         val request = slot<LoginRequest>()
 
         repository.login(username = "emilys", password = "emilyspass")
@@ -81,7 +81,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `bad credentials surface as a http failure carrying the server message`() = runTest(testBody = {
-        coEvery(stubBlock = { authApi.login(any()) }) throws httpException(code = 400, body = """{"message":"Invalid credentials"}""")
+        coEvery(stubBlock = { authApi.login(request = any()) }) throws httpException(code = 400, body = """{"message":"Invalid credentials"}""")
 
         val thrown = assertThrows(AppException.Http::class.java) {
             kotlinx.coroutines.runBlocking(block = { repository.login(username = "emilys", password = "wrong") })
@@ -93,7 +93,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `being offline surfaces as a network failure`() = runTest(testBody = {
-        coEvery(stubBlock = { authApi.login(any()) }) throws UnknownHostException()
+        coEvery(stubBlock = { authApi.login(request = any()) }) throws UnknownHostException()
 
         assertThrows(AppException.Network::class.java) {
             kotlinx.coroutines.runBlocking(block = { repository.login(username = "emilys", password = "emilyspass") })
@@ -102,11 +102,11 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `a failed login stores nothing`() = runTest(testBody = {
-        coEvery(stubBlock = { authApi.login(any()) }) throws UnknownHostException()
+        coEvery(stubBlock = { authApi.login(request = any()) }) throws UnknownHostException()
 
         runCatching(block = { repository.login(username = "emilys", password = "emilyspass") })
 
-        coVerify(exactly = 0, verifyBlock = { sessionManager.saveSession(any()) })
+        coVerify(exactly = 0, verifyBlock = { sessionManager.saveSession(session = any()) })
     })
 
     @Test

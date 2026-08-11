@@ -63,7 +63,7 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.state.value.isUsernameBlank)
-        coVerify(exactly = 0, verifyBlock = { loginUseCase(any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { loginUseCase(username = any(), password = any()) })
     })
 
     @Test
@@ -74,7 +74,7 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.state.value.isUsernameBlank)
-        coVerify(exactly = 0, verifyBlock = { loginUseCase(any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { loginUseCase(username = any(), password = any()) })
     })
 
     @Test
@@ -85,7 +85,7 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.state.value.isPasswordBlank)
-        coVerify(exactly = 0, verifyBlock = { loginUseCase(any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { loginUseCase(username = any(), password = any()) })
     })
 
     /** The field error has to disappear as soon as the user starts fixing it. */
@@ -103,7 +103,7 @@ class LoginViewModelTest {
 
     @Test
     fun `it submits whatever is currently in the fields`() = runTest(testBody = {
-        coEvery(stubBlock = { loginUseCase(any(), any()) }) returns user()
+        coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) returns user()
         viewModel.onUsernameChange(username = "someone")
         viewModel.onPasswordChange(password = "secret")
 
@@ -119,7 +119,7 @@ class LoginViewModelTest {
     @Test
     fun `it shows loading while the call is in flight and clears it afterwards`() = runTest(
         testBody = {
-            coEvery(stubBlock = { loginUseCase(any(), any()) }) returns user()
+            coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) returns user()
 
             viewModel.signIn()
             // The coroutine has not been allowed to run yet, so this is the in-flight state.
@@ -129,13 +129,13 @@ class LoginViewModelTest {
 
             assertFalse(viewModel.state.value.isLoading)
             assertNull(viewModel.state.value.errorMessage)
-            coVerify(exactly = 1, verifyBlock = { loginUseCase(any(), any()) })
+            coVerify(exactly = 1, verifyBlock = { loginUseCase(username = any(), password = any()) })
         }
     )
 
     @Test
     fun `bad credentials surface the server message`() = runTest(testBody = {
-        coEvery(stubBlock = { loginUseCase(any(), any()) }) throws AppException.Http(
+        coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) throws AppException.Http(
             code = 400,
             serverMessage = "Invalid credentials"
         )
@@ -149,7 +149,7 @@ class LoginViewModelTest {
 
     @Test
     fun `being offline surfaces a message rather than crashing`() = runTest(testBody = {
-        coEvery(stubBlock = { loginUseCase(any(), any()) }) throws AppException.Network(
+        coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) throws AppException.Network(
             cause = UnknownHostException()
         )
 
@@ -161,7 +161,7 @@ class LoginViewModelTest {
 
     @Test
     fun `retrying clears the previous failure before calling again`() = runTest(testBody = {
-        coEvery(stubBlock = { loginUseCase(any(), any()) }) throws AppException.Http(
+        coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) throws AppException.Http(
             code = 400,
             serverMessage = "Invalid credentials"
         )
@@ -169,7 +169,7 @@ class LoginViewModelTest {
         advanceUntilIdle()
         assertEquals("Invalid credentials", viewModel.state.value.errorMessage)
 
-        coEvery(stubBlock = { loginUseCase(any(), any()) }) returns user()
+        coEvery(stubBlock = { loginUseCase(username = any(), password = any()) }) returns user()
         viewModel.signIn()
         advanceUntilIdle()
 

@@ -39,14 +39,14 @@ class TokenAuthenticatorTest {
         val retry = authenticator.authenticate(route = null, response = response)
 
         assertNull(retry)
-        verify(exactly = 0, verifyBlock = { authApi.refreshSync(any()) })
+        verify(exactly = 0, verifyBlock = { authApi.refreshSync(request = any()) })
     }
 
     @Test
     fun `it replays the request with a refreshed token`() {
         every(stubBlock = { tokenStore.currentAccessToken() }) returns "expired"
         every(stubBlock = { tokenStore.currentRefreshToken() }) returns "refresh-token"
-        every(stubBlock = { authApi.refreshSync(any()) }) returns callReturning(
+        every(stubBlock = { authApi.refreshSync(request = any()) }) returns callReturning(
             response = retrofit2.Response.success(RefreshResponse(accessToken = "fresh-access", refreshToken = "fresh-refresh"))
         )
 
@@ -60,7 +60,7 @@ class TokenAuthenticatorTest {
     fun `it persists the refreshed tokens`() {
         every(stubBlock = { tokenStore.currentAccessToken() }) returns "expired"
         every(stubBlock = { tokenStore.currentRefreshToken() }) returns "refresh-token"
-        every(stubBlock = { authApi.refreshSync(any()) }) returns callReturning(
+        every(stubBlock = { authApi.refreshSync(request = any()) }) returns callReturning(
             response = retrofit2.Response.success(RefreshResponse(accessToken = "fresh-access", refreshToken = "fresh-refresh"))
         )
         val saved = slot<AuthTokens>()
@@ -95,14 +95,14 @@ class TokenAuthenticatorTest {
 
         assertNull(retry)
         verify(exactly = 1, verifyBlock = { tokenStore.clear() })
-        verify(exactly = 0, verifyBlock = { authApi.refreshSync(any()) })
+        verify(exactly = 0, verifyBlock = { authApi.refreshSync(request = any()) })
     }
 
     @Test
     fun `it clears the session when the refresh itself is rejected`() {
         every(stubBlock = { tokenStore.currentAccessToken() }) returns "expired"
         every(stubBlock = { tokenStore.currentRefreshToken() }) returns "refresh-token"
-        every(stubBlock = { authApi.refreshSync(any()) }) returns callReturning(
+        every(stubBlock = { authApi.refreshSync(request = any()) }) returns callReturning(
             response = retrofit2.Response.error(
                 401,
                 """{"message":"Invalid/Expired Token!"}""".toResponseBody("application/json".toMediaType())
@@ -121,7 +121,7 @@ class TokenAuthenticatorTest {
         every(stubBlock = { tokenStore.currentRefreshToken() }) returns "refresh-token"
         val call: Call<RefreshResponse> = mockk()
         every(stubBlock = { call.execute() }) throws java.io.IOException("offline")
-        every(stubBlock = { authApi.refreshSync(any()) }) returns call
+        every(stubBlock = { authApi.refreshSync(request = any()) }) returns call
 
         val retry = authenticator.authenticate(route = null, response = unauthorizedResponse())
 
@@ -140,7 +140,7 @@ class TokenAuthenticatorTest {
         val retry = authenticator.authenticate(route = null, response = response)
 
         assertNull(retry)
-        verify(exactly = 0, verifyBlock = { authApi.refreshSync(any()) })
+        verify(exactly = 0, verifyBlock = { authApi.refreshSync(request = any()) })
     }
 
     /**
@@ -154,7 +154,7 @@ class TokenAuthenticatorTest {
         val retry = authenticator.authenticate(route = null, response = unauthorizedResponse())
 
         assertEquals("Bearer already-refreshed", retry!!.header(name = "Authorization"))
-        verify(exactly = 0, verifyBlock = { authApi.refreshSync(any()) })
+        verify(exactly = 0, verifyBlock = { authApi.refreshSync(request = any()) })
     }
 
     private fun callReturning(response: retrofit2.Response<RefreshResponse>): Call<RefreshResponse> {

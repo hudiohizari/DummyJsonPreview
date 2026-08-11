@@ -26,7 +26,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `it trims the username so a stray space cannot fail the login`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.login(any(), any()) }) returns stubUser()
+        coEvery(stubBlock = { repository.login(username = any(), password = any()) }) returns stubUser()
 
         useCase(username = "  emilys  ", password = "emilyspass")
 
@@ -35,7 +35,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `it leaves the password untouched because whitespace can be significant`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.login(any(), any()) }) returns stubUser()
+        coEvery(stubBlock = { repository.login(username = any(), password = any()) }) returns stubUser()
 
         useCase(username = "emilys", password = "  pass with spaces  ")
 
@@ -47,7 +47,7 @@ class LoginUseCaseTest {
     @Test
     fun `it returns the authenticated user`() = runTest(testBody = {
         val expected = stubUser()
-        coEvery(stubBlock = { repository.login(any(), any()) }) returns expected
+        coEvery(stubBlock = { repository.login(username = any(), password = any()) }) returns expected
 
         val actual = useCase(username = "emilys", password = "emilyspass")
 
@@ -56,7 +56,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `it lets repository failures propagate untouched`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.login(any(), any()) }) throws AppException.Http(
+        coEvery(stubBlock = { repository.login(username = any(), password = any()) }) throws AppException.Http(
             code = 400,
             serverMessage = "Invalid credentials"
         )

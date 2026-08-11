@@ -24,37 +24,37 @@ class GetProductsUseCaseTest {
 
     @Test
     fun `a blank query lists products instead of searching`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.getProducts(any(), any()) }) returns stubProductPage()
+        coEvery(stubBlock = { repository.getProducts(limit = any(), skip = any()) }) returns stubProductPage()
 
         useCase(query = "", limit = 20, skip = 0)
 
         coVerify(exactly = 1, verifyBlock = { repository.getProducts(limit = 20, skip = 0) })
-        coVerify(exactly = 0, verifyBlock = { repository.searchProducts(any(), any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { repository.searchProducts(query = any(), limit = any(), skip = any()) })
     })
 
     @Test
     fun `a whitespace only query lists products instead of searching`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.getProducts(any(), any()) }) returns stubProductPage()
+        coEvery(stubBlock = { repository.getProducts(limit = any(), skip = any()) }) returns stubProductPage()
 
         useCase(query = "   ", limit = 20, skip = 0)
 
         coVerify(exactly = 1, verifyBlock = { repository.getProducts(limit = 20, skip = 0) })
-        coVerify(exactly = 0, verifyBlock = { repository.searchProducts(any(), any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { repository.searchProducts(query = any(), limit = any(), skip = any()) })
     })
 
     @Test
     fun `a non blank query searches instead of listing`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.searchProducts(any(), any(), any()) }) returns stubProductPage(count = 5, total = 5)
+        coEvery(stubBlock = { repository.searchProducts(query = any(), limit = any(), skip = any()) }) returns stubProductPage(count = 5, total = 5)
 
         useCase(query = "phone", limit = 20, skip = 0)
 
         coVerify(exactly = 1, verifyBlock = { repository.searchProducts(query = "phone", limit = 20, skip = 0) })
-        coVerify(exactly = 0, verifyBlock = { repository.getProducts(any(), any()) })
+        coVerify(exactly = 0, verifyBlock = { repository.getProducts(limit = any(), skip = any()) })
     })
 
     @Test
     fun `the query is trimmed before it reaches the repository`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.searchProducts(any(), any(), any()) }) returns stubProductPage(count = 5, total = 5)
+        coEvery(stubBlock = { repository.searchProducts(query = any(), limit = any(), skip = any()) }) returns stubProductPage(count = 5, total = 5)
 
         useCase(query = "  phone  ", limit = 20, skip = 0)
 
@@ -63,7 +63,7 @@ class GetProductsUseCaseTest {
 
     @Test
     fun `paging arguments are forwarded unchanged when searching`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.searchProducts(any(), any(), any()) }) returns stubProductPage(count = 5, total = 23, skip = 20)
+        coEvery(stubBlock = { repository.searchProducts(query = any(), limit = any(), skip = any()) }) returns stubProductPage(count = 5, total = 23, skip = 20)
 
         useCase(query = "phone", limit = 20, skip = 20)
 
@@ -73,7 +73,7 @@ class GetProductsUseCaseTest {
     @Test
     fun `it returns the page the repository produced`() = runTest(testBody = {
         val expected = stubProductPage(count = 20, total = 194)
-        coEvery(stubBlock = { repository.getProducts(any(), any()) }) returns expected
+        coEvery(stubBlock = { repository.getProducts(limit = any(), skip = any()) }) returns expected
 
         val actual = useCase(query = "", limit = 20, skip = 0)
 
@@ -82,7 +82,7 @@ class GetProductsUseCaseTest {
 
     @Test
     fun `it defaults to the standard page size`() = runTest(testBody = {
-        coEvery(stubBlock = { repository.getProducts(any(), any()) }) returns stubProductPage()
+        coEvery(stubBlock = { repository.getProducts(limit = any(), skip = any()) }) returns stubProductPage()
 
         useCase()
 

@@ -25,6 +25,14 @@
     <string name="action_edit">Edit</string>
     <string name="action_open_sample_product">Open sample product</string>
 
+    <string name="greeting_welcome">Welcome, %1$s</string>
+    <string name="hint_search_products">Search products</string>
+    <string name="action_clear_search">Clear search</string>
+    <string name="action_retry">Retry</string>
+    <string name="error_title">Something went wrong</string>
+    <string name="empty_products_title">No products found</string>
+    <string name="empty_products_message">Try a different search term.</string>
+
     <string name="coming_soon_message">This section is not available yet.</string>
     <string name="placeholder_login">Sign in with your DummyJSON account.</string>
     <string name="placeholder_edit">Editing arrives with the product form.</string>

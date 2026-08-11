@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import id.my.hizari.dummyjsonpreview.R
-import id.my.hizari.dummyjsonpreview.ui.components.PlaceholderContent
+import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**
@@ -20,7 +20,7 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 @Composable
 fun AddProductScreen(modifier: Modifier = Modifier) {
-    PlaceholderContent(
+    StateMessage(
         modifier = modifier,
         title = stringResource(id = R.string.title_add_product),
         message = stringResource(id = R.string.placeholder_add_product),

@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import id.my.hizari.dummyjsonpreview.R
-import id.my.hizari.dummyjsonpreview.ui.components.PlaceholderContent
+import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**
@@ -27,7 +27,7 @@ fun ComingSoonScreen(
     modifier: Modifier = Modifier,
     @StringRes titleRes: Int
 ) {
-    PlaceholderContent(
+    StateMessage(
         modifier = modifier,
         title = stringResource(id = titleRes),
         message = stringResource(id = R.string.coming_soon_message),

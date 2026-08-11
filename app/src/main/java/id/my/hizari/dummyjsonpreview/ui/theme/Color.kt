@@ -24,6 +24,8 @@ val OnSurfaceLightVariant = Color(color = 0xFF4B5563)
 val OutlineLight = Color(color = 0xFF8A94A3)
 val ErrorLight = Color(color = 0xFFB3261E)
 val ErrorLightOn = Color(color = 0xFFFFFFFF)
+val ErrorLightContainer = Color(color = 0xFFFCE8E6)
+val ErrorLightOnContainer = Color(color = 0xFF7A1710)
 
 /* Container tones. Components such as NavigationBar draw from these, and leaving them unset is what
    tinted the bottom bar lavender from the Material baseline palette. */
@@ -46,6 +48,8 @@ val OnSurfaceDarkVariant = Color(color = 0xFFB4BECC)
 val OutlineDark = Color(color = 0xFF7A8695)
 val ErrorDark = Color(color = 0xFFFFB4AB)
 val ErrorDarkOn = Color(color = 0xFF601410)
+val ErrorDarkContainer = Color(color = 0xFF48120D)
+val ErrorDarkOnContainer = Color(color = 0xFFFFDAD6)
 
 val ContainerDarkLowest = Color(color = 0xFF0A0E13)
 val ContainerDarkLow = Color(color = 0xFF161C23)

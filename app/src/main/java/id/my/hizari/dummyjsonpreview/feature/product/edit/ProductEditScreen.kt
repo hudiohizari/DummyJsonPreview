@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import id.my.hizari.dummyjsonpreview.R
-import id.my.hizari.dummyjsonpreview.ui.components.PlaceholderContent
+import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**
@@ -23,7 +23,7 @@ fun ProductEditScreen(
     modifier: Modifier = Modifier,
     productId: Int
 ) {
-    PlaceholderContent(
+    StateMessage(
         modifier = modifier,
         title = stringResource(id = R.string.title_product_edit, productId),
         message = stringResource(id = R.string.placeholder_edit),

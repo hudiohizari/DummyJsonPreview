@@ -1,9 +1,12 @@
 package id.my.hizari.dummyjsonpreview.data.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import id.my.hizari.dummyjsonpreview.data.auth.api.AuthApi
 import id.my.hizari.dummyjsonpreview.data.auth.api.AuthInterceptor
@@ -45,13 +48,22 @@ object NetworkModule {
         level = HttpLoggingInterceptor.Level.BODY
     })
 
+    /** Debug builds inspect traffic in-app; the release variant resolves to Chucker's no-op. */
+    @Provides
+    @Singleton
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context
+    ): ChuckerInterceptor = ChuckerInterceptor.Builder(context).build()
+
     @Provides
     @Singleton
     @UnauthenticatedClient
     fun provideUnauthenticatedClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        chuckerInterceptor: ChuckerInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor = loggingInterceptor)
+        .addInterceptor(interceptor = chuckerInterceptor)
         .build()
 
     @Provides
@@ -77,11 +89,13 @@ object NetworkModule {
     fun provideAuthenticatedClient(
         authInterceptor: AuthInterceptor,
         tokenAuthenticator: TokenAuthenticator,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        chuckerInterceptor: ChuckerInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor = authInterceptor)
-        // Logging goes after auth so the bearer header shows up in the log line.
+        // Logging and Chucker go after auth so the bearer header shows up in what they record.
         .addInterceptor(interceptor = loggingInterceptor)
+        .addInterceptor(interceptor = chuckerInterceptor)
         .authenticator(authenticator = tokenAuthenticator)
         .build()
 

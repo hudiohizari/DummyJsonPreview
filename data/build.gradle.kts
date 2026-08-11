@@ -28,6 +28,9 @@ dependencies {
     ksp(libs.dagger.hilt.compiler)
 
     implementation(libs.bundles.network)
+    // Debug builds get the in-app HTTP inspector; release swaps in the no-op so nothing ships.
+    debugImplementation(libs.chucker.library)
+    releaseImplementation(libs.chucker.library.no.op)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.core)
 

@@ -108,6 +108,33 @@ of something get an explicit precondition for that reason.
 Coroutine tests assert in flight state, not just the final result, so a flag that is set and cleared
 without ever being observable fails.
 
+## CI
+
+Two GitHub Actions workflows:
+
+- **CI** runs on every push to `main` and on pull requests against it: unit tests, lint, and a debug
+  build. Reports are uploaded when something fails, and the debug APK is kept as an artifact.
+- **Release** runs when a `v*` tag is pushed. It runs the tests first, then builds both APKs and
+  attaches them to a GitHub release named after the tag.
+
+```bash
+git tag v1.0.0 && git push origin v1.0.0
+```
+
+Releases are signed with the debug key unless a keystore is configured, because an unsigned APK
+cannot be installed. To sign properly, add these repository secrets:
+
+| Secret | Value |
+| --- | --- |
+| `RELEASE_KEYSTORE` | the keystore file, base64 encoded |
+| `RELEASE_KEYSTORE_PASSWORD` | store password |
+| `RELEASE_KEY_ALIAS` | key alias |
+| `RELEASE_KEY_PASSWORD` | key password |
+
+```bash
+base64 -i release.jks | pbcopy
+```
+
 ## Notable dependencies
 
 | | |

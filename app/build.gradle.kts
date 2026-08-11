@@ -19,11 +19,29 @@ android {
         versionName = "1.0"
     }
 
+    // The release keystore is handed to the build through the environment so it never enters the
+    // repository. Releases fall back to the debug key when it is absent, because an unsigned APK
+    // cannot be installed and a tag build that produces one is not worth publishing.
+    val releaseKeystorePath: String? = System.getenv("RELEASE_KEYSTORE_PATH")
+
+    signingConfigs {
+        if (releaseKeystorePath != null) {
+            create("release") {
+                storeFile = file(releaseKeystorePath)
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             optimization {
                 enable = false
             }
+            signingConfig = signingConfigs.findByName("release")
+                ?: signingConfigs.getByName("debug")
         }
     }
     compileOptions {

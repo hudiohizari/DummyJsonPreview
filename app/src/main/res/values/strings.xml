@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Dummy Json Preview</string>
+
+    <string name="nav_products">Products</string>
+    <string name="nav_categories">Categories</string>
+    <string name="nav_add">Add</string>
+    <string name="nav_carts">Carts</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="title_login">Sign in</string>
+    <string name="title_products">Products</string>
+    <string name="title_product_detail">Product %1$d</string>
+    <string name="title_product_edit">Edit product %1$d</string>
+    <string name="title_add_product">Add product</string>
+
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_logout">Log out</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_open_sample_product">Open sample product</string>
+
+    <string name="coming_soon_message">This section is not available yet.</string>
+    <string name="placeholder_login">Sign in with your DummyJSON account.</string>
+    <string name="placeholder_edit">Editing arrives with the product form.</string>
+    <string name="placeholder_add_product">Create a product from this tab.</string>
 </resources>

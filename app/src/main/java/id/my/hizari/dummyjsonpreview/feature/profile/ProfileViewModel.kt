@@ -1,17 +1,19 @@
-package id.my.hizari.dummyjsonpreview
+package id.my.hizari.dummyjsonpreview.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.my.hizari.dummyjsonpreview.domain.auth.model.User
+import id.my.hizari.dummyjsonpreview.domain.auth.usecase.LogoutUseCase
 import id.my.hizari.dummyjsonpreview.domain.auth.usecase.ObserveCurrentUserUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * id.my.hizari.dummyjsonpreview
+ * id.my.hizari.dummyjsonpreview.feature.profile
  *
  * Created by Hudio Hizari on 11/08/26.
  * https://github.com/hudiohizari
@@ -19,17 +21,20 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class ProfileViewModel @Inject constructor(
+    private val logoutUseCase: LogoutUseCase,
     observeCurrentUserUseCase: ObserveCurrentUserUseCase
 ) : ViewModel() {
 
-    val authState: StateFlow<AuthState> = observeCurrentUserUseCase()
-        .map(transform = { user ->
-            if (user != null) AuthState.Authenticated else AuthState.Unauthenticated
-        })
+    val user: StateFlow<User?> = observeCurrentUserUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = AuthState.Loading
+            initialValue = null
         )
+
+    // Clearing the session is enough to move the user: the root graph follows the session state.
+    fun logout() {
+        viewModelScope.launch(block = { logoutUseCase() })
+    }
 }

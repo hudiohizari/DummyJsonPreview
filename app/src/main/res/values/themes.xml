@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.DummyJsonPreview" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Applied to the activity so the system splash covers the session lookup on cold start. -->
+    <style name="Theme.DummyJsonPreview.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="postSplashScreenTheme">@style/Theme.DummyJsonPreview</item>
+    </style>
 </resources>

@@ -5,17 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import id.my.hizari.dummyjsonpreview.navigation.RootNavGraph
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**
@@ -30,31 +25,29 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        // Holding the splash until the stored session has been read is what prevents the login
+        // screen appearing for a frame on a cold start.
+        splashScreen.setKeepOnScreenCondition(
+            condition = { viewModel.authState.value == AuthState.Loading }
+        )
         enableEdgeToEdge()
         setContent(content = {
-            DummyJsonPreviewTheme {
-                val status by viewModel.status.collectAsStateWithLifecycle()
-                AppLabel(label = status)
+            DummyJsonPreviewTheme(dynamicColor = false) {
+                val authState by viewModel.authState.collectAsStateWithLifecycle()
+                if (authState != AuthState.Loading) {
+                    val authenticated = authState == AuthState.Authenticated
+                    // Frozen so later session changes redirect instead of rebuilding the graph.
+                    val startsAuthenticated = rememberSaveable(init = { authenticated })
+                    RootNavGraph(
+                        isAuthenticated = authenticated,
+                        startsAuthenticated = startsAuthenticated
+                    )
+                }
             }
         })
-    }
-}
-
-@Composable
-private fun AppLabel(
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = label)
-        }
     }
 }

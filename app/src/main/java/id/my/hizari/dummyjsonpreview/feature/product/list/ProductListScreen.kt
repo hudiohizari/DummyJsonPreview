@@ -25,8 +25,8 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 @Composable
 fun ProductListScreen(
-    onProductClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onProductClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -37,8 +37,8 @@ fun ProductListScreen(
     ) {
         Text(text = stringResource(id = R.string.title_products))
         Button(
-            onClick = { onProductClick(1) },
             modifier = Modifier.padding(top = 12.dp),
+            onClick = { onProductClick(1) },
             content = { Text(text = stringResource(id = R.string.action_open_sample_product)) }
         )
     }

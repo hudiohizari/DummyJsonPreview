@@ -10,7 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import id.my.hizari.dummyjsonpreview.navigation.RootNavGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.RootNavGraph
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**

@@ -1,4 +1,4 @@
-package id.my.hizari.dummyjsonpreview.navigation
+package id.my.hizari.dummyjsonpreview.navigation.graph
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -7,9 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import id.my.hizari.dummyjsonpreview.R
 import id.my.hizari.dummyjsonpreview.feature.comingsoon.ComingSoonScreen
+import id.my.hizari.dummyjsonpreview.navigation.Screen
 
 /**
- * id.my.hizari.dummyjsonpreview.navigation
+ * id.my.hizari.dummyjsonpreview.navigation.graph
  *
  * Created by Hudio Hizari on 11/08/26.
  * https://github.com/hudiohizari
@@ -23,8 +24,8 @@ fun NavGraphBuilder.categoriesGraph() {
     ) {
         composable(route = Screen.Categories.route) {
             ComingSoonScreen(
-                titleRes = R.string.nav_categories,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                titleRes = R.string.nav_categories
             )
         }
     }

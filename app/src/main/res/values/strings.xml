@@ -13,7 +13,14 @@
     <string name="title_product_edit">Edit product %1$d</string>
     <string name="title_add_product">Add product</string>
 
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="error_username_required">Username is required</string>
+    <string name="error_password_required">Password is required</string>
+
     <string name="action_sign_in">Sign in</string>
+    <string name="action_show_password">Show password</string>
+    <string name="action_hide_password">Hide password</string>
     <string name="action_logout">Log out</string>
     <string name="action_edit">Edit</string>
     <string name="action_open_sample_product">Open sample product</string>

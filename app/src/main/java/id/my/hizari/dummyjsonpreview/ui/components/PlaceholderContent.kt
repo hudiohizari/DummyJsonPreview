@@ -28,10 +28,10 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 @Composable
 fun PlaceholderContent(
+    modifier: Modifier = Modifier,
     title: String,
     message: String,
-    icon: ImageVector,
-    modifier: Modifier = Modifier
+    icon: ImageVector
 ) {
     Column(
         modifier = modifier
@@ -46,16 +46,16 @@ fun PlaceholderContent(
             tint = MaterialTheme.colorScheme.primary
         )
         Text(
+            modifier = Modifier.padding(top = 12.dp),
             text = title,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(top = 12.dp)
+            style = MaterialTheme.typography.titleLarge
         )
         Text(
+            modifier = Modifier.padding(top = 4.dp),
             text = message,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 4.dp)
+            textAlign = TextAlign.Center
         )
     }
 }

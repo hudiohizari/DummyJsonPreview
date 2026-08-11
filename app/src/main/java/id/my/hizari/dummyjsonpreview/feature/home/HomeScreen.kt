@@ -31,11 +31,11 @@ import androidx.navigation.compose.rememberNavController
 import id.my.hizari.dummyjsonpreview.navigation.AppDestinations
 import id.my.hizari.dummyjsonpreview.navigation.AppTransitions
 import id.my.hizari.dummyjsonpreview.navigation.Screen
-import id.my.hizari.dummyjsonpreview.navigation.addProductGraph
-import id.my.hizari.dummyjsonpreview.navigation.cartsGraph
-import id.my.hizari.dummyjsonpreview.navigation.categoriesGraph
-import id.my.hizari.dummyjsonpreview.navigation.productGraph
-import id.my.hizari.dummyjsonpreview.navigation.profileGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.addProductGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.cartsGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.categoriesGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.productGraph
+import id.my.hizari.dummyjsonpreview.navigation.graph.profileGraph
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 /**
@@ -77,6 +77,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     )
 
     NavigationSuiteScaffold(
+        modifier = modifier,
+        // Pinned so a tablet or landscape window keeps the bottom bar instead of a navigation rail.,
         navigationSuiteItems = {
             AppDestinations.entries.forEach { destination ->
                 item(
@@ -110,8 +112,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
             }
         },
-        modifier = modifier,
-        // Pinned so a tablet or landscape window keeps the bottom bar instead of a navigation rail.
         layoutType = NavigationSuiteType.NavigationBar
     ) {
         Box(
@@ -122,9 +122,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
         ) {
             NavHost(
+                modifier = Modifier.fillMaxSize(),
                 navController = navController,
                 startDestination = Screen.ProductGraph.route,
-                modifier = Modifier.fillMaxSize(),
                 enterTransition = AppTransitions.Enter,
                 exitTransition = AppTransitions.Exit,
                 popEnterTransition = AppTransitions.PopEnter,

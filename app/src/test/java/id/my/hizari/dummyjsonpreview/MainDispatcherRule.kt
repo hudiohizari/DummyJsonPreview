@@ -1,6 +1,7 @@
 package id.my.hizari.dummyjsonpreview
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -19,6 +20,7 @@ import org.junit.runner.Description
 /**
  * Swaps the main dispatcher so viewModelScope work runs on the test scheduler.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
     val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {

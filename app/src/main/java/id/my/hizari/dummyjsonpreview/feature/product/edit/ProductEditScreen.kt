@@ -20,14 +20,14 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
 @Composable
 fun ProductEditScreen(
-    productId: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    productId: Int
 ) {
     PlaceholderContent(
+        modifier = modifier,
         title = stringResource(id = R.string.title_product_edit, productId),
         message = stringResource(id = R.string.placeholder_edit),
-        icon = Icons.Default.Edit,
-        modifier = modifier
+        icon = Icons.Default.Edit
     )
 }
 

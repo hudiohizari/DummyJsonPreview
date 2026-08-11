@@ -21,10 +21,10 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 @Composable
 fun AddProductScreen(modifier: Modifier = Modifier) {
     PlaceholderContent(
+        modifier = modifier,
         title = stringResource(id = R.string.title_add_product),
         message = stringResource(id = R.string.placeholder_add_product),
-        icon = Icons.Default.AddBox,
-        modifier = modifier
+        icon = Icons.Default.AddBox
     )
 }
 

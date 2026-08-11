@@ -36,17 +36,17 @@ fun ProfileScreen(
     val user by viewModel.user.collectAsStateWithLifecycle()
 
     ProfileContent(
+        modifier = modifier,
         user = user,
-        onLogout = viewModel::logout,
-        modifier = modifier
+        onLogout = viewModel::logout
     )
 }
 
 @Composable
 fun ProfileContent(
+    modifier: Modifier = Modifier,
     user: User?,
-    onLogout: () -> Unit,
-    modifier: Modifier = Modifier
+    onLogout: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -65,8 +65,8 @@ fun ProfileContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Button(
-            onClick = onLogout,
             modifier = Modifier.padding(top = 24.dp),
+            onClick = onLogout,
             content = { Text(text = stringResource(id = R.string.action_logout)) }
         )
     }

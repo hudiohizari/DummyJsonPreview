@@ -1,4 +1,4 @@
-package id.my.hizari.dummyjsonpreview.navigation
+package id.my.hizari.dummyjsonpreview.navigation.graph
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -14,9 +14,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import id.my.hizari.dummyjsonpreview.feature.home.HomeScreen
 import id.my.hizari.dummyjsonpreview.feature.login.LoginScreen
+import id.my.hizari.dummyjsonpreview.navigation.Screen
 
 /**
- * id.my.hizari.dummyjsonpreview.navigation
+ * id.my.hizari.dummyjsonpreview.navigation.graph
  *
  * Created by Hudio Hizari on 11/08/26.
  * https://github.com/hudiohizari
@@ -33,9 +34,9 @@ import id.my.hizari.dummyjsonpreview.feature.login.LoginScreen
  */
 @Composable
 fun RootNavGraph(
+    modifier: Modifier = Modifier,
     isAuthenticated: Boolean,
-    startsAuthenticated: Boolean,
-    modifier: Modifier = Modifier
+    startsAuthenticated: Boolean
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -54,9 +55,9 @@ fun RootNavGraph(
     }
 
     NavHost(
+        modifier = modifier.fillMaxSize(),
         navController = navController,
         startDestination = if (startsAuthenticated) Screen.Main.route else Screen.Login.route,
-        modifier = modifier.fillMaxSize(),
         enterTransition = { fadeIn(animationSpec = tween(durationMillis = 220)) },
         exitTransition = { fadeOut(animationSpec = tween(durationMillis = 220)) },
         builder = {

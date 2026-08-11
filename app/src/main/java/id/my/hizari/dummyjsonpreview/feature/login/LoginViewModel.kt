@@ -24,15 +24,40 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(value = LoginState())
+    // Prefilled with the DummyJSON demo account so the app can be signed into without typing.
+    private val _state = MutableStateFlow(
+        value = LoginState(username = DEMO_USERNAME, password = DEMO_PASSWORD)
+    )
     val state: StateFlow<LoginState> = _state.asStateFlow()
 
+    fun onUsernameChange(username: String) {
+        _state.update(function = { it.copy(username = username, isUsernameBlank = false) })
+    }
+
+    fun onPasswordChange(password: String) {
+        _state.update(function = { it.copy(password = password, isPasswordBlank = false) })
+    }
+
     // A successful sign in needs no navigation call: storing the session moves the root graph.
-    fun signIn(username: String, password: String) {
+    fun signIn() {
+        val current = _state.value
+        val usernameBlank = current.username.isBlank()
+        val passwordBlank = current.password.isBlank()
+        if (usernameBlank || passwordBlank) {
+            _state.update(function = {
+                it.copy(
+                    isUsernameBlank = usernameBlank,
+                    isPasswordBlank = passwordBlank,
+                    errorMessage = null
+                )
+            })
+            return
+        }
+
         _state.update(function = { it.copy(isLoading = true, errorMessage = null) })
         viewModelScope.launch(block = {
             try {
-                loginUseCase(username = username, password = password)
+                loginUseCase(username = current.username, password = current.password)
                 _state.update(function = { it.copy(isLoading = false) })
             } catch (throwable: Throwable) {
                 _state.update(function = {
@@ -40,5 +65,10 @@ class LoginViewModel @Inject constructor(
                 })
             }
         })
+    }
+
+    private companion object {
+        const val DEMO_USERNAME = "emilys"
+        const val DEMO_PASSWORD = "emilyspass"
     }
 }

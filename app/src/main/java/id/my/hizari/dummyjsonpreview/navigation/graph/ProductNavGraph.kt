@@ -1,4 +1,4 @@
-package id.my.hizari.dummyjsonpreview.navigation
+package id.my.hizari.dummyjsonpreview.navigation.graph
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -11,9 +11,11 @@ import androidx.navigation.navigation
 import id.my.hizari.dummyjsonpreview.feature.product.detail.ProductDetailScreen
 import id.my.hizari.dummyjsonpreview.feature.product.edit.ProductEditScreen
 import id.my.hizari.dummyjsonpreview.feature.product.list.ProductListScreen
+import id.my.hizari.dummyjsonpreview.navigation.NavigationArgs
+import id.my.hizari.dummyjsonpreview.navigation.Screen
 
 /**
- * id.my.hizari.dummyjsonpreview.navigation
+ * id.my.hizari.dummyjsonpreview.navigation.graph
  *
  * Created by Hudio Hizari on 11/08/26.
  * https://github.com/hudiohizari
@@ -27,12 +29,12 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
     ) {
         composable(route = Screen.ProductList.route) {
             ProductListScreen(
+                modifier = Modifier.fillMaxSize(),
                 onProductClick = { productId ->
                     navController.navigate(
                         route = Screen.ProductDetail.createRoute(productId = productId)
                     )
-                },
-                modifier = Modifier.fillMaxSize()
+                }
             )
         }
         composable(
@@ -42,13 +44,13 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             )
         ) { backStackEntry ->
             ProductDetailScreen(
+                modifier = Modifier.fillMaxSize(),
                 productId = backStackEntry.arguments?.getInt(NavigationArgs.PRODUCT_ID) ?: 0,
                 onEditClick = { productId ->
                     navController.navigate(
                         route = Screen.ProductEdit.createRoute(productId = productId)
                     )
-                },
-                modifier = Modifier.fillMaxSize()
+                }
             )
         }
         composable(
@@ -58,8 +60,8 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             )
         ) { backStackEntry ->
             ProductEditScreen(
-                productId = backStackEntry.arguments?.getInt(NavigationArgs.PRODUCT_ID) ?: 0,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                productId = backStackEntry.arguments?.getInt(NavigationArgs.PRODUCT_ID) ?: 0
             )
         }
     }

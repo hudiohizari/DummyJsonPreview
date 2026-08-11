@@ -24,14 +24,14 @@ import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
  */
 @Composable
 fun ComingSoonScreen(
-    @StringRes titleRes: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @StringRes titleRes: Int
 ) {
     PlaceholderContent(
+        modifier = modifier,
         title = stringResource(id = titleRes),
         message = stringResource(id = R.string.coming_soon_message),
-        icon = Icons.Default.Schedule,
-        modifier = modifier
+        icon = Icons.Default.Schedule
     )
 }
 

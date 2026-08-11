@@ -9,6 +9,10 @@ package id.my.hizari.dummyjsonpreview.feature.login
  */
 
 data class LoginState(
+    val username: String = "",
+    val password: String = "",
+    val isUsernameBlank: Boolean = false,
+    val isPasswordBlank: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

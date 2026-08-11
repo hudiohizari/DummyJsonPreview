@@ -66,6 +66,75 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         init = { mutableStateListOf(Screen.ProductGraph.route) }
     )
 
+    HomeScaffold(
+        modifier = modifier,
+        currentDestination = currentDestination,
+        onDestinationClick = { destination ->
+            if (destination == currentDestination) {
+                navController.popBackStack(route = destination.rootRoute, inclusive = false)
+            } else {
+                tabHistory.remove(element = destination.graphRoute)
+                tabHistory.add(element = destination.graphRoute)
+                navController.navigate(route = destination.graphRoute) {
+                    popUpTo(id = navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        }
+    ) {
+        NavHost(
+            modifier = Modifier.fillMaxSize(),
+            navController = navController,
+            startDestination = Screen.ProductGraph.route,
+            enterTransition = AppTransitions.Enter,
+            exitTransition = AppTransitions.Exit,
+            popEnterTransition = AppTransitions.PopEnter,
+            popExitTransition = AppTransitions.PopExit,
+            builder = {
+                productGraph(navController = navController)
+                categoriesGraph()
+                addProductGraph()
+                cartsGraph()
+                profileGraph()
+            }
+        )
+
+        // Registered after the NavHost, so it outranks the inner controller's own back handling
+        // while it is enabled.
+        val isAtTabRoot = navBackStackEntry?.destination?.id ==
+            navBackStackEntry?.destination?.parent?.findStartDestination()?.id
+        BackHandler(
+            enabled = tabHistory.size > 1 && isAtTabRoot,
+            onBack = {
+                tabHistory.removeAt(index = tabHistory.lastIndex)
+                val previousTab = tabHistory.lastOrNull() ?: Screen.ProductGraph.route
+                navController.navigate(route = previousTab) {
+                    popUpTo(id = navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
+    }
+}
+
+/**
+ * The bottom navigation shell, kept free of the graph so it can be previewed. Rendering the real
+ * [HomeScreen] would compose the tab graphs, and those reach for a view model the preview renderer
+ * has no activity to build.
+ */
+@Composable
+fun HomeScaffold(
+    modifier: Modifier = Modifier,
+    currentDestination: AppDestinations,
+    onDestinationClick: (AppDestinations) -> Unit,
+    content: @Composable () -> Unit
+) {
     val itemColors = NavigationSuiteDefaults.itemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(
             selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -78,29 +147,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
     NavigationSuiteScaffold(
         modifier = modifier,
-        // Pinned so a tablet or landscape window keeps the bottom bar instead of a navigation rail.,
+        // Pinned so a tablet or landscape window keeps the bottom bar instead of a navigation rail.
         navigationSuiteItems = {
             AppDestinations.entries.forEach { destination ->
                 item(
                     selected = destination == currentDestination,
-                    onClick = {
-                        if (destination == currentDestination) {
-                            navController.popBackStack(
-                                route = destination.rootRoute,
-                                inclusive = false
-                            )
-                        } else {
-                            tabHistory.remove(element = destination.graphRoute)
-                            tabHistory.add(element = destination.graphRoute)
-                            navController.navigate(route = destination.graphRoute) {
-                                popUpTo(id = navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    },
+                    onClick = { onDestinationClick(destination) },
                     icon = {
                         Icon(
                             imageVector = destination.icon,
@@ -112,59 +164,40 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
             }
         },
-        layoutType = NavigationSuiteType.NavigationBar
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(
-                    insets = WindowInsets.safeDrawing.only(sides = WindowInsetsSides.Top)
-                )
-        ) {
-            NavHost(
-                modifier = Modifier.fillMaxSize(),
-                navController = navController,
-                startDestination = Screen.ProductGraph.route,
-                enterTransition = AppTransitions.Enter,
-                exitTransition = AppTransitions.Exit,
-                popEnterTransition = AppTransitions.PopEnter,
-                popExitTransition = AppTransitions.PopExit,
-                builder = {
-                    productGraph(navController = navController)
-                    categoriesGraph()
-                    addProductGraph()
-                    cartsGraph()
-                    profileGraph()
-                }
-            )
-
-            // Registered after the NavHost, so it outranks the inner controller's own back handling
-            // while it is enabled.
-            val isAtTabRoot = navBackStackEntry?.destination?.id ==
-                navBackStackEntry?.destination?.parent?.findStartDestination()?.id
-            BackHandler(
-                enabled = tabHistory.size > 1 && isAtTabRoot,
-                onBack = {
-                    tabHistory.removeAt(index = tabHistory.lastIndex)
-                    val previousTab = tabHistory.lastOrNull() ?: Screen.ProductGraph.route
-                    navController.navigate(route = previousTab) {
-                        popUpTo(id = navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
+        layoutType = NavigationSuiteType.NavigationBar,
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(
+                        insets = WindowInsets.safeDrawing.only(sides = WindowInsetsSides.Top)
+                    ),
+                content = { content() }
             )
         }
+    )
+}
+
+@Preview(name = "Home shell", showBackground = true)
+@Composable
+private fun HomeScaffoldPreview() {
+    DummyJsonPreviewTheme(dynamicColor = false) {
+        HomeScaffold(
+            currentDestination = AppDestinations.PRODUCT,
+            onDestinationClick = {},
+            content = {}
+        )
     }
 }
 
-/** Renders the shell with the product tab as start destination, which needs no ViewModel. */
-@Preview(name = "Home shell", showBackground = true)
+@Preview(name = "Home shell on profile", showBackground = true)
 @Composable
-private fun HomeScreenPreview() {
+private fun HomeScaffoldProfilePreview() {
     DummyJsonPreviewTheme(dynamicColor = false) {
-        HomeScreen()
+        HomeScaffold(
+            currentDestination = AppDestinations.PROFILE,
+            onDestinationClick = {},
+            content = {}
+        )
     }
 }

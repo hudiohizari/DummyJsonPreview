@@ -42,15 +42,16 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             arguments = listOf(
                 navArgument(name = NavigationArgs.PRODUCT_ID, builder = { type = NavType.IntType })
             )
-        ) { backStackEntry ->
+        ) {
+            // The id reaches the view model through its SavedStateHandle, so it is not passed here.
             ProductDetailScreen(
                 modifier = Modifier.fillMaxSize(),
-                productId = backStackEntry.arguments?.getInt(NavigationArgs.PRODUCT_ID) ?: 0,
                 onEditClick = { productId ->
                     navController.navigate(
                         route = Screen.ProductEdit.createRoute(productId = productId)
                     )
-                }
+                },
+                onNavigateBack = { navController.popBackStack() }
             )
         }
         composable(

@@ -33,6 +33,36 @@
     <string name="empty_products_title">No products found</string>
     <string name="empty_products_message">Try a different search term.</string>
 
+    <string name="action_back">Back</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+
+    <string name="delete_confirm_title">Delete product?</string>
+    <string name="delete_confirm_message">%1$s will be removed. This cannot be undone.</string>
+    <string name="delete_success_title">Product deleted</string>
+    <string name="delete_success_message">%1$s was deleted.</string>
+
+    <string name="section_description">Description</string>
+    <string name="section_specifications">Specifications</string>
+    <string name="section_reviews">Reviews</string>
+    <string name="empty_reviews_message">No reviews yet.</string>
+
+    <string name="label_brand">Brand</string>
+    <string name="label_sku">SKU</string>
+    <string name="label_weight">Weight</string>
+    <string name="label_dimensions">Dimensions</string>
+    <string name="label_warranty">Warranty</string>
+    <string name="label_shipping">Shipping</string>
+    <string name="label_return_policy">Return policy</string>
+    <string name="label_minimum_order">Minimum order</string>
+
+    <string name="format_discount">-%1$s%%</string>
+    <string name="format_stock">%1$d in stock</string>
+    <string name="format_weight">%1$s g</string>
+    <string name="format_dimensions">%1$s x %2$s x %3$s cm</string>
+    <string name="format_minimum_order">%1$d pcs</string>
+
     <string name="coming_soon_message">This section is not available yet.</string>
     <string name="placeholder_login">Sign in with your DummyJSON account.</string>
     <string name="placeholder_edit">Editing arrives with the product form.</string>

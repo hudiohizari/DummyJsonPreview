@@ -113,7 +113,8 @@ without ever being observable fails.
 Two GitHub Actions workflows:
 
 - **CI** runs on every push to `main` and on pull requests against it: unit tests, lint, and a debug
-  build. Reports are uploaded when something fails, and the debug APK is kept as an artifact.
+  build. The build is a check rather than a deliverable, so nothing is kept except the reports, and
+  those only when something fails.
 - **Release** runs when a `v*` tag is pushed. It runs the tests first, then builds both APKs and
   attaches them to a GitHub release named after the tag.
 

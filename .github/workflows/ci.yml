@@ -39,6 +39,7 @@ jobs:
       - name: Lint
         run: ./gradlew :app:lintDebug
 
+      # Built to prove it still packages, not kept: APKs are published by the release workflow.
       - name: Assemble debug
         run: ./gradlew :app:assembleDebug
 
@@ -53,10 +54,3 @@ jobs:
             **/build/reports/
             **/build/test-results/
           retention-days: 7
-
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 14

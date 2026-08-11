@@ -1,8 +1,8 @@
 package id.my.hizari.dummyjsonpreview.domain
 
-import id.my.hizari.dummyjsonpreview.domain.model.Product
-import id.my.hizari.dummyjsonpreview.domain.model.ProductPage
-import id.my.hizari.dummyjsonpreview.domain.model.User
+import id.my.hizari.dummyjsonpreview.domain.product.model.Product
+import id.my.hizari.dummyjsonpreview.domain.product.model.ProductPage
+import id.my.hizari.dummyjsonpreview.domain.auth.model.User
 
 /**
  * id.my.hizari.dummyjsonpreview.domain
@@ -59,7 +59,7 @@ fun stubProductPage(
     skip: Int = 0,
     limit: Int = 20
 ): ProductPage = ProductPage(
-    products = List(size = count) { index -> stubProduct(id = skip + index) },
+    products = List(size = count, init = { index -> stubProduct(id = skip + index) }),
     total = total,
     skip = skip,
     limit = limit

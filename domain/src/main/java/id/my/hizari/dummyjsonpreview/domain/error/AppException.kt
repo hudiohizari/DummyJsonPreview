@@ -17,13 +17,13 @@ sealed class AppException(
     cause: Throwable? = null
 ) : Exception(message, cause) {
 
-    class Network(cause: Throwable? = null) : AppException("Network unavailable", cause)
+    class Network(cause: Throwable? = null) : AppException(message = "Network unavailable", cause = cause)
 
-    class Timeout(cause: Throwable? = null) : AppException("Connection timed out", cause)
+    class Timeout(cause: Throwable? = null) : AppException(message = "Connection timed out", cause = cause)
 
-    class Unauthorized(val serverMessage: String? = null) : AppException(serverMessage)
+    class Unauthorized(val serverMessage: String? = null) : AppException(message = serverMessage)
 
-    class Http(val code: Int, val serverMessage: String? = null) : AppException(serverMessage)
+    class Http(val code: Int, val serverMessage: String? = null) : AppException(message = serverMessage)
 
-    class Unknown(cause: Throwable? = null) : AppException(cause?.message, cause)
+    class Unknown(cause: Throwable? = null) : AppException(message = cause?.message, cause = cause)
 }

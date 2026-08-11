@@ -4,19 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +18,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.my.hizari.dummyjsonpreview.R
 import id.my.hizari.dummyjsonpreview.feature.product.form.ProductForm
 import id.my.hizari.dummyjsonpreview.feature.product.form.ProductFormState
+import id.my.hizari.dummyjsonpreview.ui.components.AppTopBar
+import id.my.hizari.dummyjsonpreview.ui.components.LoadingIndicator
 import id.my.hizari.dummyjsonpreview.ui.components.MessageDialog
 import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
@@ -80,19 +75,9 @@ fun ProductEditContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.title_edit_product)) },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onNavigateBack,
-                        content = {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(id = R.string.action_back)
-                            )
-                        }
-                    )
-                }
+            AppTopBar(
+                title = stringResource(id = R.string.title_edit_product),
+                onNavigateBack = onNavigateBack
             )
         }
     ) { innerPadding ->
@@ -102,9 +87,7 @@ fun ProductEditContent(
                 .padding(paddingValues = innerPadding)
         ) {
             when {
-                state.isLoading -> CircularProgressIndicator(
-                    modifier = Modifier.align(alignment = Alignment.Center)
-                )
+                state.isLoading -> LoadingIndicator()
 
                 state.showFullScreenError -> StateMessage(
                     icon = Icons.Default.ErrorOutline,

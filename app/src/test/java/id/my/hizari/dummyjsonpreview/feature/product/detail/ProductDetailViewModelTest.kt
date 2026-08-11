@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -112,7 +113,7 @@ class ProductDetailViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.state.value.isDeleteDialogVisible)
-        assertFalse(viewModel.state.value.isDeleted)
+        assertNull(viewModel.state.value.deletedTitle)
         coVerify(exactly = 0, verifyBlock = { deleteProduct(id = any()) })
     })
 
@@ -144,7 +145,7 @@ class ProductDetailViewModelTest {
         advanceUntilIdle()
 
         assertEquals("Essence Mascara Lash Princess", viewModel.state.value.deletedTitle)
-        assertTrue(viewModel.state.value.isDeleted)
+        assertNotNull(viewModel.state.value.deletedTitle)
         assertFalse(viewModel.state.value.isDeleteDialogVisible)
         assertFalse(viewModel.state.value.isDeleting)
         assertNull(viewModel.state.value.deleteErrorMessage)
@@ -167,12 +168,12 @@ class ProductDetailViewModelTest {
         advanceTimeBy(delayTimeMillis = 50)
 
         assertTrue(viewModel.state.value.isDeleting)
-        assertFalse(viewModel.state.value.isDeleted)
+        assertNull(viewModel.state.value.deletedTitle)
 
         advanceUntilIdle()
 
         assertFalse(viewModel.state.value.isDeleting)
-        assertTrue(viewModel.state.value.isDeleted)
+        assertNotNull(viewModel.state.value.deletedTitle)
     })
 
     /** A second tap while the request is running would delete twice. */
@@ -209,7 +210,7 @@ class ProductDetailViewModelTest {
         assertEquals("Network unavailable", viewModel.state.value.deleteErrorMessage)
         assertTrue(viewModel.state.value.isDeleteDialogVisible)
         assertFalse(viewModel.state.value.isDeleting)
-        assertFalse(viewModel.state.value.isDeleted)
+        assertNull(viewModel.state.value.deletedTitle)
         assertEquals(PRODUCT_ID, viewModel.state.value.product?.id)
         assertNull(viewModel.state.value.errorMessage)
     })

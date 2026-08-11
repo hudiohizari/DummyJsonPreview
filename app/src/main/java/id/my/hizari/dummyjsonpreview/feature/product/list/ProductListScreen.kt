@@ -14,10 +14,10 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -35,6 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.my.hizari.dummyjsonpreview.R
 import id.my.hizari.dummyjsonpreview.domain.product.model.Product
+import id.my.hizari.dummyjsonpreview.ui.components.LoadingIndicator
 import id.my.hizari.dummyjsonpreview.ui.components.StateBanner
 import id.my.hizari.dummyjsonpreview.ui.components.StateMessage
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
@@ -116,9 +117,7 @@ fun ProductListContent(
             onRefresh = onRefresh
         ) {
             when {
-                state.isLoading -> CircularProgressIndicator(
-                    modifier = Modifier.align(alignment = Alignment.Center)
-                )
+                state.isLoading -> LoadingIndicator()
 
                 state.showFullScreenError -> StateMessage(
                     icon = Icons.Default.ErrorOutline,

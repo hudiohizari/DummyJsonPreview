@@ -9,7 +9,6 @@
 
     <string name="title_login">Sign in</string>
     <string name="title_products">Products</string>
-    <string name="title_product_detail">Product %1$d</string>
     <string name="title_edit_product">Edit product</string>
     <string name="title_add_product">Add product</string>
 
@@ -23,7 +22,6 @@
     <string name="action_hide_password">Hide password</string>
     <string name="action_logout">Log out</string>
     <string name="action_edit">Edit</string>
-    <string name="action_open_sample_product">Open sample product</string>
 
     <string name="greeting_welcome">Welcome, %1$s</string>
     <string name="hint_search_products">Search products</string>

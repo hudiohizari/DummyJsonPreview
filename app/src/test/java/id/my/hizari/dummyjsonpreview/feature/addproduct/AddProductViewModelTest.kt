@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -48,7 +49,7 @@ class AddProductViewModelTest {
 
         assertEquals(ProductFormError.REQUIRED, viewModel.state.value.titleError)
         assertEquals(ProductFormError.REQUIRED, viewModel.state.value.priceError)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
         coVerify(exactly = 0, verifyBlock = { addProduct(draft = any()) })
     })
 
@@ -78,7 +79,6 @@ class AddProductViewModelTest {
         assertEquals(9.99, draft.captured.price!!, 0.001)
         assertEquals("beauty", draft.captured.category)
         assertEquals("Essence Mascara Lash Princess", viewModel.state.value.savedTitle)
-        assertTrue(viewModel.state.value.isSaved)
         assertFalse(viewModel.state.value.isSubmitting)
         coVerify(exactly = 1, verifyBlock = { addProduct(draft = any()) })
     })
@@ -96,12 +96,12 @@ class AddProductViewModelTest {
         advanceTimeBy(delayTimeMillis = 50)
 
         assertTrue(viewModel.state.value.isSubmitting)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
 
         advanceUntilIdle()
 
         assertFalse(viewModel.state.value.isSubmitting)
-        assertTrue(viewModel.state.value.isSaved)
+        assertNotNull(viewModel.state.value.savedTitle)
     })
 
     @Test
@@ -132,7 +132,7 @@ class AddProductViewModelTest {
         assertEquals("Mascara", viewModel.state.value.title)
         assertEquals("9.99", viewModel.state.value.price)
         assertFalse(viewModel.state.value.isSubmitting)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
     })
 
     @Test
@@ -148,7 +148,7 @@ class AddProductViewModelTest {
         advanceUntilIdle()
 
         assertNull(viewModel.state.value.submitErrorMessage)
-        assertTrue(viewModel.state.value.isSaved)
+        assertNotNull(viewModel.state.value.savedTitle)
     })
 
     /** Keyboard type only hints the soft keyboard, so a paste can still put anything in a field. */
@@ -172,11 +172,10 @@ class AddProductViewModelTest {
         val viewModel = fillValidForm()
         viewModel.onSubmit()
         advanceUntilIdle()
-        assertTrue(viewModel.state.value.isSaved)
+        assertNotNull(viewModel.state.value.savedTitle)
 
         viewModel.onSavedAcknowledged()
 
-        assertFalse(viewModel.state.value.isSaved)
         assertNull(viewModel.state.value.savedTitle)
         assertEquals("", viewModel.state.value.title)
         assertEquals("", viewModel.state.value.price)

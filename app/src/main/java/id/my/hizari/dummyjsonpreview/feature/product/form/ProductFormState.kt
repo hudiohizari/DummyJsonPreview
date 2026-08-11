@@ -35,9 +35,6 @@ data class ProductFormState(
             discountError != null ||
             stockError != null
 
-    val isSaved: Boolean
-        get() = savedTitle != null
-
     /** A failure only takes over the screen when there are no fields to fall back on. */
     val showFullScreenError: Boolean
         get() = loadErrorMessage != null && title.isEmpty()

@@ -22,7 +22,4 @@ data class ProductDetailState(
     /** A failure only takes over the screen when there is no product to fall back on. */
     val showFullScreenError: Boolean
         get() = errorMessage != null && product == null
-
-    val isDeleted: Boolean
-        get() = deletedTitle != null
 }

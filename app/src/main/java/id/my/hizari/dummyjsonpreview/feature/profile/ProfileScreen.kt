@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import id.my.hizari.dummyjsonpreview.R
 import id.my.hizari.dummyjsonpreview.domain.auth.model.User
+import id.my.hizari.dummyjsonpreview.ui.components.AppTopBar
 import id.my.hizari.dummyjsonpreview.ui.components.StateBanner
 import id.my.hizari.dummyjsonpreview.ui.theme.DummyJsonPreviewTheme
 
@@ -79,7 +79,7 @@ fun ProfileContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(title = { Text(text = stringResource(id = R.string.title_profile)) })
+            AppTopBar(title = stringResource(id = R.string.title_profile))
         }
     ) { innerPadding ->
         PullToRefreshBox(

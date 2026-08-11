@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -118,7 +119,7 @@ class ProductEditViewModelTest {
         advanceUntilIdle()
 
         assertEquals(ProductFormError.REQUIRED, viewModel.state.value.titleError)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
         coVerify(exactly = 0, verifyBlock = { updateProduct(id = any(), draft = any()) })
     })
 
@@ -158,12 +159,12 @@ class ProductEditViewModelTest {
         advanceTimeBy(delayTimeMillis = 50)
 
         assertTrue(viewModel.state.value.isSubmitting)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
 
         advanceUntilIdle()
 
         assertFalse(viewModel.state.value.isSubmitting)
-        assertTrue(viewModel.state.value.isSaved)
+        assertNotNull(viewModel.state.value.savedTitle)
     })
 
     @Test
@@ -197,7 +198,7 @@ class ProductEditViewModelTest {
         assertEquals("Network unavailable", viewModel.state.value.submitErrorMessage)
         assertNull(viewModel.state.value.loadErrorMessage)
         assertEquals("Essence Mascara Lash Princess", viewModel.state.value.title)
-        assertFalse(viewModel.state.value.isSaved)
+        assertNull(viewModel.state.value.savedTitle)
         assertFalse(viewModel.state.value.showFullScreenError)
     })
 

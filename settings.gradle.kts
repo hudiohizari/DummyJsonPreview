@@ -24,4 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Dummy Json Preview"
 include(":app")
+include(":data")
+include(":domain")
  

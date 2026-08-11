@@ -6,6 +6,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+/**
+ * id.my.hizari.dummyjsonpreview.ui.theme
+ *
+ * Created by Hudio Hizari on 11/08/26.
+ * https://github.com/hudiohizari
+ * https://hizari.my.id
+ */
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(

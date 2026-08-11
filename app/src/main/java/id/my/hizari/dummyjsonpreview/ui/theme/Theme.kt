@@ -1,6 +1,5 @@
 package id.my.hizari.dummyjsonpreview.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +9,14 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+
+/**
+ * id.my.hizari.dummyjsonpreview.ui.theme
+ *
+ * Created by Hudio Hizari on 11/08/26.
+ * https://github.com/hudiohizari
+ * https://hizari.my.id
+ */
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
